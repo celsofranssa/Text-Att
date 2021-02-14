@@ -4,6 +4,6 @@ name: "debate"
 
 dir: "../resources/datasets/debate/"
 
-batch_size: 4
+batch_size: 64
 
 num_workers: 64

@@ -1,5 +1,6 @@
 import torch
 from pytorch_lightning import LightningModule
+from pytorch_lightning.metrics.classification import F1
 from torch import nn
 from torch.optim import Adam
 
@@ -26,6 +27,8 @@ class TextAttClassifier(LightningModule):
 
         self.loss = nn.NLLLoss()
 
+        self.f1_score = F1(num_classes=self.hparams.num_classes, average='macro')
+
     def forward(self, x):
         attn_output = self.multihead_att(x)
         pool_out = self.pool(attn_output)
@@ -45,10 +48,13 @@ class TextAttClassifier(LightningModule):
         x, y = batch["x"], batch["y"]
         y_hat = self(x)
         val_loss = self.loss(y_hat, y)
+        f1 = self.f1_score(y, torch.argmax(y_hat, dim=1))
         self.log("val_loss", val_loss, prog_bar=True)
+        self.log("F1", f1, prog_bar=True)
 
     def validation_epoch_end(self, outs):
-        pass
+        # log epoch metric
+        self.log('F1', self.f1_score.compute())
 
     def test_step(self, batch, batch_idx):
         pass

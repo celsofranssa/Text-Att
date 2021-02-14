@@ -17,6 +17,7 @@ def fit(settings):
     # TODO: implement early stopping callback
 
     for fold in settings.folds:
+        print(f"Fitting on fold {fold}")
 
         dm = TextAttDataModule(settings.data)
 

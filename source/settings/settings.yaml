@@ -17,13 +17,13 @@ model_checkpoint:
 
 tasks: ["fit"]
 
-folds: [0]
+folds: [0, 1, 2, 3, 4]
 
 stats:
   dir: "../resources/stats/"
 
 trainer:
-  max_epochs: 100
-  patience: 10
+  max_epochs: 3
+  patience: 1
   min_delta: 0.01
-  fast_dev_run: True
+  fast_dev_run: False
