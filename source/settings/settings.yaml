@@ -7,7 +7,7 @@ model:
   num_heads: 12
   dropout: 0.1
   num_classes: 2
-  lr: e-5
+  lr: e-3
 
 log:
   dir: "../resources/logs/"
