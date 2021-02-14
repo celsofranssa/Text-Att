@@ -1,18 +1,16 @@
 import pytorch_lightning as pl
 from torch.utils.data import DataLoader
 
-from source.Dataset.CodeSearchDataset import CodeSearchDataset
+from source.dataset.TextAttDataset import TextAttDataset
 
 
 class TextAttDataModule(pl.LightningDataModule):
     """
     """
 
-    def __init__(self, hparams, x1_tokenizer, x2_tokenizer):
+    def __init__(self, hparams):
         super().__init__()
         self.hparams = hparams
-        self.x1_tokenizer = x1_tokenizer
-        self.x2_tokenizer = x2_tokenizer
 
     def prepare_data(self):
         pass
@@ -21,29 +19,17 @@ class TextAttDataModule(pl.LightningDataModule):
 
         # Assign train/val datasets for use in dataloaders
         if stage == 'fit' or stage is None:
-            self.train_dataset = CodeSearchDataset(
-                path=self.hparams.train.path,
-                x1_tokenizer=self.x1_tokenizer,
-                x2_tokenizer=self.x2_tokenizer,
-                x1_length=self.hparams.x1_length,
-                x2_length=self.hparams.x2_length
+            self.train_dataset = TextAttDataset(
+                path=self.hparams.train.path
             )
 
-            self.val_dataset = CodeSearchDataset(
-                path=self.hparams.val.path,
-                x1_tokenizer=self.x1_tokenizer,
-                x2_tokenizer=self.x2_tokenizer,
-                x1_length=self.hparams.x1_length,
-                x2_length=self.hparams.x2_length
+            self.val_dataset = TextAttDataset(
+                path=self.hparams.val.path
             )
 
         if stage == 'test' or stage is None:
-            self.test_dataset = CodeSearchDataset(
-                path=self.hparams.val.path,
-                x1_tokenizer=self.x1_tokenizer,
-                x2_tokenizer=self.x2_tokenizer,
-                x1_length=self.hparams.x1_length,
-                x2_length=self.hparams.x2_length
+            self.test_dataset = TextAttDataset(
+                path=self.hparams.val.path
             )
 
     def train_dataloader(self):
