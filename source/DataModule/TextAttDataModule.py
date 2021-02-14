@@ -15,21 +15,21 @@ class TextAttDataModule(pl.LightningDataModule):
     def prepare_data(self):
         pass
 
-    def setup(self, stage=None):
+    def setup(self, stage=None, fold=0):
 
         # Assign train/val datasets for use in dataloaders
         if stage == 'fit' or stage is None:
             self.train_dataset = TextAttDataset(
-                path=self.hparams.train.path
+                path=f"{self.hparams.dir}/fold_{fold}/train.jsonl"
             )
 
             self.val_dataset = TextAttDataset(
-                path=self.hparams.val.path
+                path=f"{self.hparams.dir}/fold_{fold}/test.jsonl"
             )
 
-        if stage == 'test' or stage is None:
+        if stage == 'test':
             self.test_dataset = TextAttDataset(
-                path=self.hparams.val.path
+                path=f"{self.hparams.dir}/fold_{fold}/test.jsonl"
             )
 
     def train_dataloader(self):

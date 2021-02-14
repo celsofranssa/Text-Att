@@ -6,13 +6,13 @@ from source.model.MaxPooling import MaxPooling
 from source.model.MultiHeadAttention import MultiHeadAttention
 
 
-class TextAtt(LightningModule):
+class TextAttClassifier(LightningModule):
     """
     Attention text classification
     """
 
     def __init__(self, hparams):
-        super(TextAtt, self).__init__()
+        super(TextAttClassifier, self).__init__()
         self.hparams = hparams
 
         self.multihead_att = MultiHeadAttention(hparams)

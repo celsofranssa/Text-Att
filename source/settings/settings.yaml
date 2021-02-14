@@ -1,3 +1,13 @@
+defaults:
+  - data: debate
+
+model:
+  name: text-att
+  embed_dim: 768
+  num_heads: 12
+  dropout: 0.1
+  num_classes: 2
+  lr: e-5
 
 log:
   dir: "../resources/logs/"
@@ -5,7 +15,9 @@ log:
 model_checkpoint:
   dir: "../resources/model_checkpoints/"
 
-tasks: [ "fit" ]
+tasks: ["fit"]
+
+folds: [0]
 
 stats:
   dir: "../resources/stats/"
@@ -14,4 +26,4 @@ trainer:
   max_epochs: 100
   patience: 10
   min_delta: 0.01
-  fast_dev_run: False
+  fast_dev_run: True
