@@ -1,4 +1,6 @@
 import json
+
+import torch
 from torch.utils.data import Dataset
 
 
@@ -17,12 +19,13 @@ class TextAttDataset(Dataset):
                 sample = json.loads(line)
                 self.samples.append({
                     "id": sample["id"],
-                    "x": sample["x"],
+                    "x": torch.tensor(sample["x"]),
                     "y": sample["y"]
                 })
 
     def __len__(self):
         return len(self.samples)
+
 
     def __getitem__(self, idx):
         return self.samples[idx]

@@ -60,6 +60,21 @@ def eval(settings):
     print("Evaluating with the following parameters:\n", OmegaConf.to_yaml(settings))
 
 
+def testing(settings):
+    print("Evaluating with the following parameters:\n", OmegaConf.to_yaml(settings))
+    dm = TextAttDataModule(settings.data)
+
+    dm.setup('fit')
+
+    #use data
+    train_dataloader = dm.train_dataloader()
+
+    for batch in train_dataloader:
+        print(batch)
+        break
+
+
+
 @hydra.main(config_path="settings/", config_name="settings")
 def perform_tasks(settings):
     os.chdir(hydra.utils.get_original_cwd())
@@ -70,6 +85,8 @@ def perform_tasks(settings):
         predict(settings)
     if "eval" in settings.tasks:
         eval(settings)
+    if "test" in settings.tasks:
+        testing(settings)
 
 
 if __name__ == '__main__':

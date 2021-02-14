@@ -27,7 +27,7 @@ class MultiHeadAttention(LightningModule):
         key = self.key_fnn(x)
         query = self.query_fnn(x)
         value = self.value_fnn(x)
-        attn_output, _ = self.multihead_attn(query, key, value)
+        attn_output, _ = self.multihead_att(query, key, value)
         return torch.transpose(attn_output, 0, 1)
 
 
