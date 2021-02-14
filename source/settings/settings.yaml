@@ -1,0 +1,17 @@
+
+log:
+  dir: "../resources/logs/"
+
+model_checkpoint:
+  dir: "../resources/model_checkpoints/"
+
+tasks: [ "fit" ]
+
+stats:
+  dir: "../resources/stats/"
+
+trainer:
+  max_epochs: 100
+  patience: 10
+  min_delta: 0.01
+  fast_dev_run: False
