@@ -33,20 +33,20 @@ class TextAttClassifier(LightningModule):
         attn_output = self.multihead_att(x)
         pool_out = self.pool(attn_output)
         linear_out = self.linear(pool_out)
-        return self.softmax(linear_out)
+        return self.softmax(linear_out), pool_out
 
     def configure_optimizers(self):
         return Adam(self.parameters(), lr=1e-3)
 
     def training_step(self, batch, batch_idx):
         x, y = batch["x"], batch["y"]
-        y_hat = self(x)
+        y_hat, _ = self(x)
         train_loss = self.loss(y_hat, y)
         return train_loss
 
     def validation_step(self, batch, batch_idx):
         x, y = batch["x"], batch["y"]
-        y_hat = self(x)
+        y_hat, _ = self(x)
         val_loss = self.loss(y_hat, y)
         f1 = self.f1_score(y, torch.argmax(y_hat, dim=1))
         self.log("val_loss", val_loss, prog_bar=True)
@@ -57,7 +57,13 @@ class TextAttClassifier(LightningModule):
         self.log('F1', self.f1_score.compute())
 
     def test_step(self, batch, batch_idx):
-        pass
+        id, x, y = batch["id"], batch["x"], batch["y"]
+        y_hat, text_representation = self(x)
+        self.write_prediction_dict({
+            "id": id,
+            "text_representation": text_representation
+        }, self.hparams.predictions.path)
+        self.log('test_f1', self.f1_score(y, torch.argmax(y_hat, dim=1)), prog_bar=True)
 
     def test_epoch_end(self, outs):
-        pass
+        self.log('m_test_mrr', self.f1_score.compute())
