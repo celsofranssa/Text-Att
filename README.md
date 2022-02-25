@@ -94,5 +94,5 @@ Epoch 15: 100%|█████████████████████�
 ### 2. Some Results
 
 <p align="center">
-  <img src="https://github.com/celsofranssa/Text-Att/raw/main/resource/assets/text_att_result.png">
+  <img src="resource/assets/text_att_result.png">
 </p>
