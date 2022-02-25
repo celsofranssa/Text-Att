@@ -92,3 +92,5 @@ Epoch 15: 100%|█████████████████████�
 ```
 
 ### 2. Some Results
+
+![text_att_result](resource/assets/text_att_result.png)
