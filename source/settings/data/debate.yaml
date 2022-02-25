@@ -2,7 +2,7 @@
 
 name: "debate"
 
-dir: "../resources/datasets/debate/"
+dir: "../resource/dataset/debate/"
 
 batch_size: 64
 

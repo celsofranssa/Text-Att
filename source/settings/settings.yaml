@@ -10,17 +10,17 @@ model:
   lr: e-3
 
 log:
-  dir: "../resources/logs/"
+  dir: "../resource/logs/"
 
 model_checkpoint:
-  dir: "../resources/model_checkpoints/"
+  dir: "../resource/model_checkpoints/"
 
 tasks: ["fit"]
 
 folds: [0, 1, 2, 3, 4]
 
 stats:
-  dir: "../resources/stats/"
+  dir: "../resource/stats/"
 
 trainer:
   max_epochs: 3

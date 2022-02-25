@@ -1,3 +1,5 @@
+import pickle
+
 import pytorch_lightning as pl
 from torch.utils.data import DataLoader
 
@@ -21,41 +23,47 @@ class TextAttDataModule(pl.LightningDataModule):
 
     def setup(self, stage=None):
 
-        # Assign train/val datasets for use in dataloaders
+        # Assign train/val dataset for use in dataloaders
         if stage == 'fit' or stage is None:
             self.train_dataset = TextAttDataset(
-                path=f"{self.hparams.dir}/fold_{fold}/train.jsonl"
+                samples=self.samples,
+                ids_path=f"{self.params.dir}fold_{self.params.fold_id}/train.pkl"
             )
 
             self.val_dataset = TextAttDataset(
-                path=f"{self.hparams.dir}/fold_{fold}/test.jsonl"
+                samples=self.samples,
+                ids_path=f"{self.params.dir}fold_{self.params.fold_id}/val.pkl"
             )
 
-        if stage == 'test':
+        if stage == 'test' or stage == "predict":
             self.test_dataset = TextAttDataset(
-                path=f"{self.hparams.dir}/fold_{fold}/test.jsonl"
+                samples=self.samples,
+                ids_path=f"{self.params.dir}fold_{self.params.fold_id}/test.pkl"
             )
 
     def train_dataloader(self):
         return DataLoader(
             self.train_dataset,
-            batch_size=self.hparams.batch_size,
+            batch_size=self.params.batch_size,
             drop_last=True,
-            num_workers=self.hparams.num_workers
+            num_workers=self.params.num_workers
         )
 
     def val_dataloader(self):
         return DataLoader(
             self.val_dataset,
-            batch_size=self.hparams.batch_size,
+            batch_size=self.params.batch_size,
             drop_last=True,
-            num_workers=self.hparams.num_workers
+            num_workers=self.params.num_workers
         )
 
     def test_dataloader(self):
         return DataLoader(
             self.test_dataset,
-            batch_size=self.hparams.batch_size,
+            batch_size=self.params.batch_size,
             drop_last=True,
-            num_workers=self.hparams.num_workers
+            num_workers=self.params.num_workers
         )
+
+    def predict_dataloader(self):
+        return self.test_dataloader()

@@ -1,4 +1,6 @@
 import pickle
+
+import torch
 from torch.utils.data import Dataset
 
 
@@ -15,43 +17,18 @@ class TextAttDataset(Dataset):
         with open(ids_path, "rb") as ids_file:
             self.ids = pickle.load(ids_file)
 
-    # def _encode(self, sample):
-    #     return {
-    #         "idx": sample["idx"],
-    #         "rpr": torch.tensor(
-    #             self.tokenizer.encode(text=sample["text"], max_length=self.max_length, padding="max_length",
-    #                                   truncation=True)
-    #         ),
-    #         "cls": sample["cls"]
-    #     }
-
     def __len__(self):
         return len(self.ids)
 
+    def _encode(self, sample):
+        return {
+            "idx": sample["idx"],
+            "rpr": torch.tensor(sample["rpr"]),
+            "cls": sample["cls"]
+        }
+
     def __getitem__(self, idx):
-        sample_idx = self.ids[idx]
+        sample_id = self.ids[idx]
         return self._encode(
-            self.samples[sample_idx]
+            self.samples[sample_id]
         )
-
-    # def __init__(self, path):
-    #     super(TextAttDataset, self).__init__()
-    #     self.samples = []
-    #     self._init_dataset(path)
-
-    # def _init_dataset(self, dataset_path):
-    #     with open(dataset_path, "r") as dataset_file:
-    #         for line in dataset_file:
-    #             sample = json.loads(line)
-    #             self.samples.append({
-    #                 "id": sample["id"],
-    #                 "x": torch.tensor(sample["x"]),
-    #                 "y": sample["y"]
-    #             })
-
-    # def __len__(self):
-    #     return len(self.samples)
-    #
-    #
-    # def __getitem__(self, idx):
-    #     return self.samples[idx]

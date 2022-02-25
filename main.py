@@ -3,6 +3,7 @@ import os
 from omegaconf import OmegaConf
 from source.helper.EvalHelper import EvalHelper
 from source.helper.FitHelper import FitHelper
+from source.helper.PredictHelper import PredictHelper
 
 
 def fit(params):
@@ -10,8 +11,12 @@ def fit(params):
     fit_helper.perform_fit()
 
 
+def predict(params):
+    predict_helper = PredictHelper(params)
+    predict_helper.perform_predict()
+
+
 def eval(params):
-    print("Evaluating with the following parameters:\n", OmegaConf.to_yaml(params))
     eval_helper = EvalHelper(params)
     eval_helper.perform_eval()
 
@@ -23,6 +28,8 @@ def perform_tasks(params):
 
     if "fit" in params.tasks:
         fit(params)
+    if "predict" in params.tasks:
+        predict(params)
     if "eval" in params.tasks:
         eval(params)
 

@@ -29,31 +29,66 @@ deactivate
 ### 2. Test Run
 The following bash command fits Text-Att model over debate dataset using batch_size=64 and a single epoch.
 ```
-python textAtt.py tasks=[fit] data=debate data.batch_size=128 trainer.max_epochs=1
+python main.py \
+  tasks=[fit,predict,eval] \
+  model=Self-Att \
+  data=WEBKB \
+  data.batch_size=64 \
+  data.num_workers=12
 ```
 If all goes well the following output should be produced:
 ```
-Fitting on fold 0
-GPU available: True, used: True
-[2021-02-15 00:18:38,580][lightning][INFO] - GPU available: True, used: True
-TPU available: None, using: 0 TPU cores
-[2021-02-15 00:18:38,580][lightning][INFO] - TPU available: None, using: 0 TPU cores
+Fitting Self-Att over REUT (fold 9) with fowling params:
+
+    model:
+      name: Self-Att
+      att_encoder:
+        _target_: source.encoder.MultiHeadAttentionEncoder.MultiHeadAttentionEncoder
+        hidden_size: 768
+        num_heads: 12
+        dropout: 0.1
+        pooling:
+          _target_: source.pooling.MaxPooling.MaxPooling
+      num_classes: 9
+      hidden_size: 768
+      lr: 5.0e-05
+      weight_decay: 0.01
+    
+    data:
+      name: WEBKB
+      dir: resource/dataset/webkb/
+      folds:[0-9]
+      max_length: 128
+      num_classes: 90
+      batch_size: 64
+      num_workers: 12
+    
+    ...
+    
+    tasks: [fit,predict,eval]
+    
+    trainer:
+      max_epochs: 16
+      gpus: 1
+      patience: 7
+      min_delta: 0.01
+      precision: 32
+
 LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
-[2021-02-15 00:18:38,580][lightning][INFO] - LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
 
-  | Name          | Type               | Params
------------------------------------------------------
-0 | multihead_att | MultiHeadAttention | 4.1 M 
-1 | pool          | MaxPooling         | 0     
-2 | linear        | Linear             | 1.5 K 
-3 | softmax       | LogSoftmax         | 0     
-4 | loss          | NLLLoss            | 0     
-5 | f1_score      | F1                 | 0     
------------------------------------------------------
-4.1 M     Trainable params
+  | Name         | Type                      | Params
+-----------------------------------------------------------
+0 | att_encoder  | MultiHeadAttentionEncoder | 4.1 M 
+1 | cls_head     | Sequential                | 69.2 K
+2 | loss         | CrossEntropyLoss          | 0     
+3 | val_metrics  | MetricCollection          | 0     
+4 | test_metrics | MetricCollection          | 0     
+-----------------------------------------------------------
+4.2 M     Trainable params
 0         Non-trainable params
-4.1 M     Total params
-
-Epoch 0: 100%|██████████████████████████████████████████████████████████████████████████| 24/24 [00:02<00:00,  8.24it/s, loss=2.54, v_num=8, val_loss=0.828, F1=0.283]
-
+4.2 M     Total params
+16.813    Total estimated model params size (MB)
+Epoch 15: 100%|█████████████████████████████████████████████████████████████████████████████| 187/187 [00:01<00:00, 111.35it/s, loss=0.801, v_num=0, val_Mac-F1=0.456, val_Mic-F1=0.776, val_Wei-F1=0.819]
 ```
+
+### 2. Some Results
