@@ -8,14 +8,18 @@ class TextAttDataModule(pl.LightningDataModule):
     """
     """
 
-    def __init__(self, hparams):
+    def __init__(self, params):
         super().__init__()
-        self.hparams = hparams
+        self.params = params
 
     def prepare_data(self):
-        pass
+        samples_path = f"{self.params.dir}" \
+                       f"fold_{self.params.fold_id}/" \
+                       f"samples.pkl"
+        with open(samples_path, "rb") as dataset_file:
+            self.samples = pickle.load(dataset_file)
 
-    def setup(self, stage=None, fold=0):
+    def setup(self, stage=None):
 
         # Assign train/val datasets for use in dataloaders
         if stage == 'fit' or stage is None:

@@ -4,7 +4,7 @@ from omegaconf import OmegaConf
 from pytorch_lightning import Trainer
 
 from source.datamodule.TextAttDataModule import TextAttDataModule
-from source.model.TextAttClassifier import TextAttClassifier
+from source.model.TextAttModel import TextAttClassifier
 
 
 def fit(settings):
