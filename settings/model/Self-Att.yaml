@@ -1,0 +1,19 @@
+name: Self-Att
+
+att_encoder:
+  _target_: source.encoder.MultiHeadAttentionEncoder.MultiHeadAttentionEncoder
+  hidden_size: 768
+  num_heads: 12
+  dropout: 0.1
+  pooling:
+    _target_: source.pooling.MaxPooling.MaxPooling
+
+num_classes: ${data.num_classes}
+hidden_size: 768
+
+lr: 5e-5
+base_lr: 1e-7
+max_lr: 1e-3
+weight_decay: 1e-2
+
+
