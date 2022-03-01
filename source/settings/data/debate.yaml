@@ -1,9 +1,0 @@
-# @package _group_
-
-name: "debate"
-
-dir: "../resource/dataset/debate/"
-
-batch_size: 64
-
-num_workers: 64
