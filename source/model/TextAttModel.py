@@ -59,7 +59,6 @@ class TextAttModel(LightningModule):
         rpr, true_cls = batch["rpr"], batch["cls"]
         pred_cls = self(rpr)
         train_loss = self.loss(pred_cls, true_cls)
-        train_loss = self.loss(pred_cls, true_cls)
 
         # log training loss
         self.log('train_loss', train_loss)
